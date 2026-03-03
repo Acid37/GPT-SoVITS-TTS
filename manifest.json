@@ -1,0 +1,37 @@
+{
+    "name": "tts_voice_plugin",
+    "version": "1.0.0",
+    "description": "基于GPT-SoVITS的文本转语音插件",
+    "author": "可acid",
+    "dependencies": {
+        "plugins": [],
+        "components": []
+    },
+    "python_dependencies": [
+        "aiohttp>=3.8.0",
+        "numpy>=1.24.0",
+        "soundfile>=0.12.1",
+        "pedalboard>=0.9.8"
+    ],
+    "dependencies_required": true,
+    "configs": ["tts_voice_plugin.config:TTSConfig"],
+    "include": [
+        {
+            "component_type": "action",
+            "component_name": "tts_voice_action",
+            "dependencies": []
+        },
+        {
+            "component_type": "command",
+            "component_name": "tts",
+            "dependencies": []
+        },
+        {
+            "component_type": "service",
+            "component_name": "tts_service",
+            "dependencies": []
+        }
+    ],
+    "entry_point": "plugin.py",
+    "min_core_version": "1.0.0"
+}
