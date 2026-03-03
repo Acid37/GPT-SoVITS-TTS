@@ -96,10 +96,14 @@ audio_b64 = await service.generate_voice("你好，世界！")
 
 1. **下载 GPT-SoVITS**：https://github.com/RVC-Boss/GPT-SoVITS
 2. **启动 API 服务**：
-   ```bash
-   python api.py -s "你的SoVITS模型路径" -g "你的GPT模型路径"
-   ```
-3. **验证服务**：访问 `http://127.0.0.1:9880` 确认服务已启动
+   （1）```bash
+        python api.py -s "你的SoVITS模型路径" -g "你的GPT模型路径"
+        ```
+   （2）如果你用的是整合包，那你应该能遇到一个runtime的文件夹，可以在整合包根目录打开终端，进到powershell然后将里面的python.exe拖入到终端（即填入其地址），注意：要按一下空格！要按一下空格！要按一下空格！再回到根目录，将api_2.py拖入，然后直接回车。参考格式如下：
+       ```bash
+       D:\GPT-SoVITS-v2pro-20250604\GPT-SoVITS-v2pro-20250604\runtime\python.exe D:\GPT-SoVITS-v2pro-20250604\GPT-SoVITS-v2pro-20250604\api_v2.py
+       ```
+4. **验证服务**：访问 `http://127.0.0.1:9880` 确认服务已启动
 
 ## 目录结构
 
