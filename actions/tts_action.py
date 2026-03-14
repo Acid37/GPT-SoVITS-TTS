@@ -122,21 +122,4 @@ class TTSVoiceAction(BaseAction):
     async def go_activate(self) -> bool:
         if not self._is_action_enabled():
             return False
-
-        # 激活条件: 关键词或随机
-        cfg = self._get_config()
-        keywords = cfg.plugin.keywords if cfg else []
-
-        if await self._keyword_match(keywords):
-            return True
-        if await self._random_activation(0.25):
-            return True
-            
-        action_require = [
-            "【核心限制】此动作只能用于说话，绝对不能用于唱歌！TTS无法发出有音调的歌声，只会输出平淡的念白。如果用户要求唱歌，不要使用此动作！",
-            "在调用此动作时，你必须在 'tts_voice_text' 参数中提供要合成语音的完整回复内容。这是强制性的。",
-            "当用户明确请求使用语音进行回复时，例如'发个语音听听'、'用语音说'等。"
-        ]
-        if await self._llm_judge_activation(action_require=action_require):
-            return True
-        return False
+        return True
