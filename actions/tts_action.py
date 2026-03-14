@@ -22,7 +22,7 @@ logger = get_logger("tts_voice_plugin.action")
 class TTSVoiceAction(BaseAction):
     """将你生成好的文本转换为语音并发送"""
     action_name = "tts_voice_action"
-    action_description = "用温暖、自然的声音说话！将你的文字转换为语音并直接发送给用户，让对话更有温度和真实感。注意：这是纯语音合成，只能说话，不能唱歌！"
+    action_description = "✨ 用声音与用户对话！将文字转换为温暖、自然的语音发送，让互动更有温度、更真实、更省力！语音对话能带来打字无法比拟的亲密感。注意：只能说话，不能唱歌！"
     chat_type = ChatType.ALL
     
     # 类级别的缓存，用于存储可用的语音风格
@@ -40,10 +40,10 @@ class TTSVoiceAction(BaseAction):
         if cls._available_styles:
             style_list = "、".join(cls._available_styles)
             # 更新 action_description
-            schema["function"]["description"] = f"用温暖、自然的声音说话！将你的文字转换为语音并直接发送给用户，让对话更有温度和真实感。可用语音风格：{style_list}。注意：这是纯语音合成，只能说话，不能唱歌！"
+            schema["function"]["description"] = f"✨ 用声音与用户对话！将文字转换为温暖、自然的语音发送，让互动更有温度、更真实、更省力！语音对话能带来打字无法比拟的亲密感。可用风格：{style_list}。注意：只能说话，不能唱歌！"
             # 更新 voice_style 字段的描述
             if "voice_style" in schema["function"]["parameters"]["properties"]:
-                schema["function"]["parameters"]["properties"]["voice_style"]["description"] = f"选择语音风格，让你的声音更有感染力！可选风格：{style_list}。如果不确定，使用 default 即可。"
+                schema["function"]["parameters"]["properties"]["voice_style"]["description"] = f"🎭 选择语音风格来表达不同的情感！可选：{style_list}。根据对话氛围选择合适的风格，会让声音更有感染力！"
         
         return schema
 
@@ -59,7 +59,7 @@ class TTSVoiceAction(BaseAction):
 
     async def execute(
         self,
-        tts_voice_text: Annotated[str, "你想要说出口的话，用自然、口语化、温暖的语气组织语言，就像真的在和朋友聊天一样！加入适当的语气词（呀、呢、哦、啦）会让声音更生动。注意：只能是说话内容，不能是歌词或唱歌！"],
+        tts_voice_text: Annotated[str, "🎙️ 你要亲口说的话！用自然、口语化、温暖的语气组织语言，就像真的在和朋友聊天一样！加入适当的语气词（呀、呢、哦、啦）会让声音更生动。保持简短亲切，不要太长太书面。注意：只能是说话内容，不能是歌词或唱歌！"],
         voice_style: Annotated[str, "选择语音风格，让你的声音更有感染力！可选风格取决于配置文件中已设置的风格，通常包含 default（自然）等。如果不确定，使用 default 即可。"] = "default",
         text_language: Annotated[str, "根据文本内容选择最合适的语言模式，让发音更准确。可选：auto（自动识别）、zh（中文）、en（英文）、ja（日文）、ko（韩文）。"] = "auto",
         **kwargs
