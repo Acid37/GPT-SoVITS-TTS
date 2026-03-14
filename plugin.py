@@ -53,3 +53,15 @@ class TTSVoicePlugin(BasePlugin):
         tts_service = TTSService(self)
         self.register_service("tts_service", tts_service)
         logger.info(f"插件 {self.plugin_name} 加载完成！TTS 服务已注册")
+
+        # 动态更新 TTSVoiceAction 的描述，让 LLM 知道可用的语音风格
+        try:
+            from .actions.tts_action import TTSVoiceAction
+            available_styles = tts_service.get_available_styles()
+            if available_styles:
+                # 设置类级别的可用风格
+                TTSVoiceAction._available_styles = available_styles
+                style_list = "、".join(available_styles)
+                logger.info(f"已动态更新 TTSVoiceAction 可用风格: {style_list}")
+        except Exception as e:
+            logger.warning(f"动态更新 TTSVoiceAction 描述失败: {e}")
