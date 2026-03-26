@@ -57,6 +57,10 @@ class TTSVoiceAction(BaseAction):
             return False
         return bool(cfg.plugin.enable and cfg.components.action_enabled)
 
+    async def go_activate(self) -> bool:
+        """激活检查：如果配置中禁用了插件或动作，则不激活（对 LLM 隐藏）"""
+        return self._is_action_enabled()
+
     async def execute(
         self,
         tts_voice_text: Annotated[str, "🎙️ 你要亲口说的话！用自然、口语化、温暖的语气组织语言，就像真的在和朋友聊天一样！加入适当的语气词（呀、呢、哦、啦）会让声音更生动。保持简短亲切，不要太长太书面。注意：只能是说话内容，不能是歌词或唱歌！"],
