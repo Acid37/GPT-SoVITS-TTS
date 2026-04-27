@@ -102,33 +102,37 @@ class TTSService(BaseService):
         global_server = self.config.tts.server
         tts_styles_config = self.config.tts_styles.styles
 
-        default_cfg = next((s for s in tts_styles_config if s.get("style_name") == "default"), None)
+        # 兼容 dict 和 TTSStyleSection 实例两种形态
+        def _get(style, key, default=None):
+            if isinstance(style, dict):
+                return style.get(key, default)
+            return getattr(style, key, default)
+
+        default_cfg = next((s for s in tts_styles_config if _get(s, "style_name") == "default"), None)
         if not default_cfg:
             logger.error("在 tts_styles 配置中未找到 'default' 风格，这是必需的。")
             return styles
 
-        default_refer_wav = default_cfg.get("refer_wav_path", "")
-        default_prompt_text = default_cfg.get("prompt_text", "")
-        default_gpt_weights = default_cfg.get("gpt_weights", "")
-        default_sovits_weights = default_cfg.get("sovits_weights", "")
+        default_refer_wav = _get(default_cfg, "refer_wav_path", "")
+        default_prompt_text = _get(default_cfg, "prompt_text", "")
+        default_gpt_weights = _get(default_cfg, "gpt_weights", "")
+        default_sovits_weights = _get(default_cfg, "sovits_weights", "")
 
         for style_cfg in tts_styles_config:
-            if not isinstance(style_cfg, dict):
-                continue
-            style_name = style_cfg.get("style_name")
+            style_name = _get(style_cfg, "style_name")
             if not style_name:
                 continue
 
             styles[style_name] = {
                 "url": global_server,
-                "name": style_cfg.get("name", style_name),
-                "refer_wav_path": style_cfg.get("refer_wav_path", default_refer_wav),
-                "prompt_text": style_cfg.get("prompt_text", default_prompt_text),
-                "prompt_language": style_cfg.get("prompt_language", "zh"),
-                "gpt_weights": style_cfg.get("gpt_weights", default_gpt_weights),
-                "sovits_weights": style_cfg.get("sovits_weights", default_sovits_weights),
-                "speed_factor": style_cfg.get("speed_factor", 1.0),
-                "text_language": style_cfg.get("text_language", "auto"),
+                "name": _get(style_cfg, "name", style_name),
+                "refer_wav_path": _get(style_cfg, "refer_wav_path", default_refer_wav),
+                "prompt_text": _get(style_cfg, "prompt_text", default_prompt_text),
+                "prompt_language": _get(style_cfg, "prompt_language", "zh"),
+                "gpt_weights": _get(style_cfg, "gpt_weights", default_gpt_weights),
+                "sovits_weights": _get(style_cfg, "sovits_weights", default_sovits_weights),
+                "speed_factor": _get(style_cfg, "speed_factor", 1.0),
+                "text_language": _get(style_cfg, "text_language", "auto"),
             }
         return styles
 
